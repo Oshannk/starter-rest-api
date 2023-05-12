@@ -42,7 +42,7 @@ app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   const items = await db.collection('participants').list()
-  console.log(JSON.stringify(items, null, 2))
+  console.log(JSON.stringify(items))
   res.json(items).end()
 })
 
