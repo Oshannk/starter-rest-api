@@ -6,7 +6,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Create or Update an item
-app.post('/:col/:key', async (req, res) => {
+app.post('/participants/:key', async (req, res) => {
   console.log(req.body)
 
   const col = req.params.col
