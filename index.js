@@ -45,7 +45,7 @@ app.get('/participants', async (req, res) => {
   const params = {
     TableName: 'participants'
   };
-  const items = await db.scan(params, (err, data) => {
+  const items = await db.createDocumentClient().scan(params, (err, data) => {
     if (err) console.log(err);
     else console.log(data.Items);
   });
