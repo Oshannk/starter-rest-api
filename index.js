@@ -41,18 +41,7 @@ app.get('/:col/:key', async (req, res) => {
 app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  // const items = await db.collection('participants').list()
-
-  const items = []
-  let lastEvaluatedKey = null
-
-  do {
-    const result = await db.collection('participants').scan({ exclusiveStartKey: lastEvaluatedKey })
-    items.push(...result.items)
-    lastEvaluatedKey = result.lastEvaluatedKey
-  } while (lastEvaluatedKey)
-
-
+  const items = await db.collection('participants').list()
   console.log(JSON.stringify(items, null, 2))
   res.json(items).end()
 })
