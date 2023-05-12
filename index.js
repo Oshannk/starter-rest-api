@@ -9,10 +9,10 @@ app.use(express.urlencoded({ extended: true }))
 app.post('/participants/:key', async (req, res) => {
   console.log(req.body)
 
-  const col = req.params.col
+  // const col = req.params.col
   const key = req.params.key
-  console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).set(key, req.body)
+  // console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
+  const item = await db.collection('participants').set(key, req.body)
   console.log(JSON.stringify(item, null, 2))
   res.json(item).end()
 })
@@ -39,9 +39,9 @@ app.get('/:col/:key', async (req, res) => {
 
 // Get a full listing
 app.get('/participants', async (req, res) => {
-  const col = req.params.col
-  console.log(`list collection: ${col} with params: ${JSON.stringify(req.params)}`)
-  const items = await db.collection(col).list()
+  // const col = req.params.col
+  // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
+  const items = await db.collection('participants').list()
   console.log(JSON.stringify(items, null, 2))
   res.json(items).end()
 })
