@@ -41,7 +41,14 @@ app.get('/:col/:key', async (req, res) => {
 app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  const items = await db.collection('participants').list()
+  // const items = await db.collection('participants').list()
+  const params = {
+    TableName: 'participants'
+  };
+  const items = await db.scan(params, (err, data) => {
+    if (err) console.log(err);
+    else console.log(data.Items);
+  });
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
