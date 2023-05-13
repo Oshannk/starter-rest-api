@@ -20,8 +20,8 @@ app.post('/participants/add', async (req, res) => {
 
 
 // Get a full listing
-app.get('/participants', async (req, res) => { 
-  const {results: items} = await db.collection('participants').filter()  
+app.get('/participants', async (req, res) => {
+  const { results: items } = await db.collection('participants').filter()
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
@@ -29,7 +29,7 @@ app.get('/participants', async (req, res) => {
 // Get a full listing personal
 app.get('/participants/details', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
-  const filteredList = items.filter(el=> el.props.active == true).map(e=> e.props.personal)
+  const filteredList = items.filter(el => el.props.active == true).map(e => e.props.personal)
   console.log(JSON.stringify(filteredList))
   res.json(filteredList).end()
 })
@@ -37,7 +37,7 @@ app.get('/participants/details', async (req, res) => {
 // Get a full listing personal
 app.get('/participants/details/deleted', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
-  const filteredList = items.filter(el=> el.props.active == false).map(e=> e.props.personal)
+  const filteredList = items.filter(el => el.props.active == false).map(e => e.props.personal)
   console.log(JSON.stringify(filteredList))
   res.json(filteredList).end()
 })
@@ -46,18 +46,30 @@ app.get('/participants/details/deleted', async (req, res) => {
 app.get('/participants/details/:email', async (req, res) => {
   const email = req.params.email
   const item = (await db.collection('participants').get(email))?.props
-  const data = {...item.personal, active: item.active}
+  if (item.active == false) {
+    res.status(400).json({ status: "error", message: 'Deleted Participant' });
+
+  }
+  const data = { ...item.personal, active: item.active }
   console.log(JSON.stringify(data, null, 2))
-  res.json(data).end()
+  res.status(200).json({
+    status: "success",
+    data: { data }
+  }).end();
+  // res.json(data).end()
 })
 
 // Get a single item work
 app.get('/participants/work/:email', async (req, res) => {
   const email = req.params.email
-  const item = (await db.collection('participants').get(email))?.props.work
-  // const data = {...item.personal, active: item.active}
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
+  const item = (await db.collection('participants').get(email))?.props
+  if (item.active == false) {
+    res.status(400).json({ status: "error", message: 'Deleted Participant' });
+
+  }
+  const data = item.work;
+  console.log(JSON.stringify(data, null, 2))
+  res.json(data).end()
 })
 
 
