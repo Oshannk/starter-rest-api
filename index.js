@@ -41,7 +41,12 @@ app.delete('/:col/:key', async (req, res) => {
 app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  const { results: items } = await db.collection('participants').list()
+  const filterCondition = {
+    'attribute': 'active',
+    'operator': '=',
+    'value': false
+  }
+  const { results: items } = await db.collection('participants').filter(filterCondition).list()
   
   console.log(JSON.stringify(items))
   res.json(items).end()
@@ -53,7 +58,7 @@ app.get('/participants/details', async (req, res) => {
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   const { results: itemsMetaData } = await db.collection('participants').list()
   const items = await Promise.all(
-    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props.personal)
+    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
   );
   console.log(JSON.stringify(items))
   res.json(items).end()
