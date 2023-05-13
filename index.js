@@ -55,11 +55,7 @@ app.get('/participants/details', async (req, res) => {
   //     }
   //   })
   // );
-  const filteredList = items.forEach(e=> {
-    if(e.props.active == true){
-      return e.props.personal;
-    }
-  })
+  const filteredList = items.filter(el=> el.props.active == true).map(e=> e.props.personal)
   console.log(JSON.stringify(filteredList))
   res.json(filteredList).end()
 })
