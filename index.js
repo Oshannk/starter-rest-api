@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
-// const db = require('@cyclic.sh/dynamodb')
-const { createDocumentClient } = require('@cyclic.sh/dynamodb');
+const db = require('@cyclic.sh/dynamodb')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -38,21 +37,12 @@ app.get('/:col/:key', async (req, res) => {
   res.json(item).end()
 })
 
-
-const docClient = createDocumentClient();
-
 // Get a full listing
 app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  // const items = await db.collection('participants').list()
-  const params = {
-    TableName: 'participants'
-  };
-  const items = await docClient.scan(params, (err, data) => {
-    if (err) console.log(err);
-    else console.log(data.Items);
-  });
+  const { results: items } = await db.collection('participants').list()
+  
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
