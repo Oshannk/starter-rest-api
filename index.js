@@ -54,13 +54,13 @@ app.get('/participants/details', async (req, res) => {
   // const  results  = await db.collection('participants').list({ attributes: 'personal' })
   
   const { results: itemsMetaData } = await db.collection('participants').list();
-  console.log(JSON.stringify('itemsMetaData:', itemsMetaData))
+  console.log('itemsMetaData:',JSON.stringify( itemsMetaData))
 
-  const results = await Promise.all(
-    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
-  );
-  console.log(JSON.stringify(results))
-  res.json(results).end()
+  // const results = await Promise.all(
+  //   itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
+  // );
+  console.log(JSON.stringify(itemsMetaData))
+  res.json(itemsMetaData).end()
 })
 
 // Catch all handler for all other request.
