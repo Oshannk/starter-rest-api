@@ -235,7 +235,7 @@ app.put('/participants/:email', async (req, res) => {
   }
 
   try {
-    const data = await db.collection('participants').set(key, body)
+    const data = await db.collection('participants').set(email, body)
     console.log(JSON.stringify(data, null, 2))
     return res.status(200).json({
       status: "success",
