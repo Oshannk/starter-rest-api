@@ -15,12 +15,17 @@ function validateDate(dateString) {
   return regex.test(dateString)
 }
 
-const validateObject = (obj) => {
+function validateObject(obj) {
   const emptyProps = []
   for (const key in obj) {
-    console.log('obj[key]', key,' ', obj[key], ' ', !obj[key]);
-    if (!obj[key]) {
+    const val = obj[key]
+    if (val === null || val === undefined || val === '') {
       emptyProps.push(key)
+    } else if (typeof val === 'object') {
+      const subEmptyProps = validateObject(val)
+      if (subEmptyProps.length > 0) {
+        emptyProps.push(`${key}: { ${subEmptyProps.join(', ')} }`)
+      }
     }
   }
   return emptyProps
