@@ -225,7 +225,7 @@ app.put('/participants/:email', async (req, res) => {
     res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` });
   }
 
-  const key = req.params.email
+  const email = req.params.email
   if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
