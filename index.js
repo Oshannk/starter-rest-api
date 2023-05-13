@@ -11,25 +11,8 @@ const validateEmail = (email) => {
 }
 
 function validateDate(dateString) {
-  const regex = /^(\d{4})\/(\d{2})\/(\d{2})$/
-  const match = dateString.match(regex)
-  console.log('dateString', dateString);
-  console.log('match', match);
-  if (match === null) {
-    return false
-  }
-  const year = parseInt(match[1], 10)
-  const month = parseInt(match[2], 10)
-  const day = parseInt(match[3], 10)
-  if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    return false
-  }
-  const date = new Date(year, month - 1, day)
-  return (
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day
-  )
+  const regex = /^\d{4}\/\d{2}\/\d{2}$/
+  return regex.test(dateString)
 }
 
 function validateObject(obj) {
@@ -62,7 +45,7 @@ app.post('/participants/add', async (req, res) => {
       return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
     }
 
-    if (validateDate(req.body.personal.dob)) {
+    if (!validateDate(req.body.personal.dob)) {
       return res.status(400).json({ status: "error", message: `Date of Birth not valid!.` }).end();
     }
 
@@ -247,7 +230,7 @@ app.put('/participants/:email', async (req, res) => {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
-  if (validateDate(req.body.personal.dob)) {
+  if (!validateDate(req.body.personal.dob)) {
     res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
   }
 
