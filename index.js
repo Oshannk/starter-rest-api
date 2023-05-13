@@ -53,7 +53,7 @@ app.get('/participants/details', async (req, res) => {
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   // const  results  = await db.collection('participants').list({ attributes: 'personal' })
   
-  const items = await db.collection('participants').list()
+  const { results: items } = await db.collection('participants').list()
   // console.log('itemsMetaData:',JSON.stringify( itemsMetaData))
 
   // const results = await Promise.all(
