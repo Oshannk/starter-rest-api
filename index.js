@@ -28,14 +28,14 @@ app.delete('/:col/:key', async (req, res) => {
 })
 
 // Get a single item
-app.get('/participants/:key', async (req, res) => {
-  // const col = req.params.col
-  const key = req.params.key
-  // console.log(`from collection: ${col} get key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = (await db.collection('participants').get(key))?.props
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
-})
+// app.get('/participants/:key', async (req, res) => {
+//   // const col = req.params.col
+//   const key = req.params.key
+//   // console.log(`from collection: ${col} get key: ${key} with params ${JSON.stringify(req.params)}`)
+//   const item = (await db.collection('participants').get(key))?.props
+//   console.log(JSON.stringify(item, null, 2))
+//   res.json(item).end()
+// })
 
 // Get a full listing
 app.get('/participants', async (req, res) => {
@@ -51,17 +51,25 @@ app.get('/participants', async (req, res) => {
 app.get('/participants/details', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  // const  results  = await db.collection('participants').list({ attributes: 'personal' })
-  
   const { results: items } = await db.collection('participants').list()
-  // console.log('itemsMetaData:',JSON.stringify( itemsMetaData))
-
-  // const results = await Promise.all(
-  //   itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
-  // );
+  
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
+// app.get('/participants/details', async (req, res) => {
+//   // const col = req.params.col
+//   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
+//   // const  results  = await db.collection('participants').list({ attributes: 'personal' })
+  
+//   const { results: items } = await db.collection('participants').list()
+//   // console.log('itemsMetaData:',JSON.stringify( itemsMetaData))
+
+//   // const results = await Promise.all(
+//   //   itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
+//   // );
+//   console.log(JSON.stringify(items))
+//   res.json(items).end()
+// })
 
 // Catch all handler for all other request.
 app.use('*', (req, res) => {
