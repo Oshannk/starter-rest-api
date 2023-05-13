@@ -51,25 +51,13 @@ app.get('/participants', async (req, res) => {
 app.get('/participants/details', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  const { results: items } = await db.collection('participants').list()
-  
+  const { results: itemsMetaData } = await db.collection('participants').list()
+  const items = await Promise.all(
+    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
+  );
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
-// app.get('/participants/details', async (req, res) => {
-//   // const col = req.params.col
-//   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-//   // const  results  = await db.collection('participants').list({ attributes: 'personal' })
-  
-//   const { results: items } = await db.collection('participants').list()
-//   // console.log('itemsMetaData:',JSON.stringify( itemsMetaData))
-
-//   // const results = await Promise.all(
-//   //   itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
-//   // );
-//   console.log(JSON.stringify(items))
-//   res.json(items).end()
-// })
 
 // Catch all handler for all other request.
 app.use('*', (req, res) => {
