@@ -115,8 +115,10 @@ app.delete('/participants/:email', async (req, res) => {
   const email = req.params.email
 
   const item = (await db.collection('participants').get(email))
+  const key = item.key
+  const {work, home, personal} = item.props
 
-  const result = await db.collection('participants').set(item.key, {...item.props, active: false})
+  const result = await db.collection('participants').set(key, {personal, home, work, active: false})
   console.log(JSON.stringify(result, null, 2))
   res.json(result).end()
 })
