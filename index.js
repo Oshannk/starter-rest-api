@@ -11,8 +11,23 @@ const validateEmail = (email) => {
 }
 
 function validateDate(dateString) {
-  const regex = /^\d{4}\/\d{2}\/\d{2}$/
-  return regex.test(dateString)
+  const regex = /^(\d{4})\/(\d{2})\/(\d{2})$/
+  const match = dateString.match(regex)
+  if (match === null) {
+    return false
+  }
+  const year = parseInt(match[1], 10)
+  const month = parseInt(match[2], 10)
+  const day = parseInt(match[3], 10)
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    return false
+  }
+  const date = new Date(year, month - 1, day)
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  )
 }
 
 function validateObject(obj) {
