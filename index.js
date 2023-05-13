@@ -53,7 +53,7 @@ app.get('/participants/details', async (req, res) => {
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   const { results: itemsMetaData } = await db.collection('participants').list()
   const items = await Promise.all(
-    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
+    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props.personal)
   );
   console.log(JSON.stringify(items))
   res.json(items).end()
