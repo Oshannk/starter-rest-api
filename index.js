@@ -37,27 +37,27 @@ app.post('/participants/add', async (req, res) => {
   try {
     const emptyProps = validateObject(req.body);
     if (emptyProps.length > 0) {
-      res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` });
+      return res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` }).end();
     }
 
     const email = req.body.personal.email
     if (validateEmail(email)) {
-      res.status(400).json({ status: "error", message: `Email not valid!.` });
+      return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
     }
 
     if (validateDate(req.body.personal.dob)) {
-      res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
+      return res.status(400).json({ status: "error", message: `Date of Birth not valid!.` }).end();
     }
 
     const data = await db.collection('participants').set(email, req.body)
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
