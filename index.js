@@ -41,10 +41,20 @@ app.get('/:col/:key', async (req, res) => {
 app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  const { results: items } = await db.collection('participants').fragment('work').list()
+  const { results: items } = await db.collection('participants').list()
   
   console.log(JSON.stringify(items))
   res.json(items).end()
+})
+
+// Get a full listing
+app.get('/participants/details', async (req, res) => {
+  // const col = req.params.col
+  // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
+  const  results  = await db.collection('participants').fragment('personal').get()
+  
+  console.log(JSON.stringify(results))
+  res.json(results).end()
 })
 
 // Catch all handler for all other request.
