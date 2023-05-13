@@ -123,6 +123,15 @@ app.delete('/participants/:email', async (req, res) => {
   res.json(result).end()
 })
 
+// Delete an item
+app.put('/participants/:email', async (req, res) => {
+  const key = req.params.email
+  const body = req.body
+  const result = await db.collection('participants').set(key, body)
+  console.log(JSON.stringify(result, null, 2))
+  res.json(result).end()
+})
+
 
 
 // Catch all handler for all other request.
