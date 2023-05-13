@@ -60,8 +60,8 @@ app.get('/participants/details', async (req, res) => {
       return e.props.personal;
     }
   })
-  console.log(JSON.stringify(items))
-  res.json(items).end()
+  console.log(JSON.stringify(filteredList))
+  res.json(filteredList).end()
 })
 
 // Catch all handler for all other request.
