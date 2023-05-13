@@ -41,7 +41,7 @@ app.post('/participants/add', async (req, res) => {
     }
 
     const email = req.body.personal.email
-    if (validateEmail(email)) {
+    if (!validateEmail(email)) {
       return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
     }
 
@@ -117,7 +117,7 @@ app.get('/participants/details/deleted', async (req, res) => {
 app.get('/participants/details/:email', async (req, res) => {
   const email = req.params.email
 
-  if (validateEmail(email)) {
+  if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
@@ -143,7 +143,7 @@ app.get('/participants/details/:email', async (req, res) => {
 app.get('/participants/work/:email', async (req, res) => {
   const email = req.params.email
 
-  if (validateEmail(email)) {
+  if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
@@ -169,7 +169,7 @@ app.get('/participants/work/:email', async (req, res) => {
 app.get('/participants/home/:email', async (req, res) => {
   const email = req.params.email
 
-  if (validateEmail(email)) {
+  if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
@@ -195,7 +195,7 @@ app.get('/participants/home/:email', async (req, res) => {
 app.delete('/participants/:email', async (req, res) => {
   const email = req.params.email
 
-  if (validateEmail(email)) {
+  if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
@@ -226,7 +226,7 @@ app.put('/participants/:email', async (req, res) => {
   }
 
   const key = req.params.email
-  if (validateEmail(email)) {
+  if (!validateEmail(email)) {
     res.status(400).json({ status: "error", message: `Email not valid!.` });
   }
 
