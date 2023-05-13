@@ -67,13 +67,13 @@ app.get('/participants', async (req, res) => {
   try {
     const { results: data } = await db.collection('participants').filter()
     console.log(JSON.stringify(data))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
 
   }
 })
@@ -85,13 +85,13 @@ app.get('/participants/details', async (req, res) => {
     const { results: items } = await db.collection('participants').filter()
     const data = items.filter(el => el.props.active == true).map(e => e.props.personal)
     console.log(JSON.stringify(data))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
@@ -101,13 +101,13 @@ app.get('/participants/details/deleted', async (req, res) => {
     const { results: items } = await db.collection('participants').filter()
     const data = items.filter(el => el.props.active == false).map(e => e.props.personal)
     console.log(JSON.stringify(data))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
 
   }
 
@@ -118,24 +118,24 @@ app.get('/participants/details/:email', async (req, res) => {
   const email = req.params.email
 
   if (!validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
+    return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
   }
 
   try {
     const item = (await db.collection('participants').get(email))?.props
     if (item.active == false) {
-      res.status(400).json({ status: "error", message: 'Deleted Participant' });
+      return res.status(400).json({ status: "error", message: 'Deleted Participant' }).end();
 
     }
     const data = { ...item.personal, active: item.active }
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
@@ -144,24 +144,24 @@ app.get('/participants/work/:email', async (req, res) => {
   const email = req.params.email
 
   if (!validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
+    return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
   }
 
   try {
     const item = (await db.collection('participants').get(email))?.props
     if (item.active == false) {
-      res.status(400).json({ status: "error", message: 'Deleted Participant' });
+      return res.status(400).json({ status: "error", message: 'Deleted Participant' }).end();
 
     }
     const data = item.work;
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
@@ -170,24 +170,24 @@ app.get('/participants/home/:email', async (req, res) => {
   const email = req.params.email
 
   if (!validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
+    return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
   }
 
   try {
     const item = (await db.collection('participants').get(email))?.props
     if (item.active == false) {
-      res.status(400).json({ status: "error", message: 'Deleted Participant' });
+      return res.status(400).json({ status: "error", message: 'Deleted Participant' }).end();
 
     }
     const data = item.home;
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
@@ -196,7 +196,7 @@ app.delete('/participants/:email', async (req, res) => {
   const email = req.params.email
 
   if (!validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
+    return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
   }
 
   try {
@@ -206,13 +206,13 @@ app.delete('/participants/:email', async (req, res) => {
 
     const data = await db.collection('participants').set(key, { personal, home, work, active: false })
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
@@ -222,28 +222,28 @@ app.put('/participants/:email', async (req, res) => {
 
   const emptyProps = validateObject(req.body);
   if (emptyProps.length > 0) {
-    res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` });
+    return res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` }).end();
   }
 
   const email = req.params.email
   if (!validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
+    return res.status(400).json({ status: "error", message: `Email not valid!.` }).end();
   }
 
   if (!validateDate(req.body.personal.dob)) {
-    res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
+    return res.status(400).json({ status: "error", message: `Date of Birth not valid!.` }).end();
   }
 
   try {
     const data = await db.collection('participants').set(key, body)
     console.log(JSON.stringify(data, null, 2))
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data
     }).end();
 
   } catch (err) {
-    res.status(500).json({ status: "error", message: 'Internal server error', error: err });
+    return res.status(500).json({ status: "error", message: 'Internal server error', error: err }).end();
   }
 })
 
