@@ -38,27 +38,22 @@ app.delete('/:col/:key', async (req, res) => {
 // })
 
 // Get a full listing
-app.get('/participants', async (req, res) => {
-  // const col = req.params.col
-  // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
-  const filterCondition = {
-    'attribute': 'props.active',
-    'operator': '=',
-    'value': true
-  }
-  const items = await db.collection('participants').filter(filterCondition)
-  
+app.get('/participants', async (req, res) => { 
+  const items = await db.collection('participants').filter()  
   console.log(JSON.stringify(items))
   res.json(items).end()
 })
 
 // Get a full listing
 app.get('/participants/details', async (req, res) => {
-  // const col = req.params.col
-  // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   const { results: itemsMetaData } = await db.collection('participants').list()
   const items = await Promise.all(
-    itemsMetaData.map(async ({ key }) => (await db.collection('participants').get(key))?.props)
+    itemsMetaData.map(async ({ key }) => {
+      const element = (await db.collection('participants').get(key))?.props;
+      if(element.active == true){
+        return element.personal;
+      }
+    })
   );
   console.log(JSON.stringify(items))
   res.json(items).end()
