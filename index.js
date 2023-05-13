@@ -27,16 +27,6 @@ app.delete('/:col/:key', async (req, res) => {
   res.json(item).end()
 })
 
-// Get a single item
-// app.get('/participants/:key', async (req, res) => {
-//   // const col = req.params.col
-//   const key = req.params.key
-//   // console.log(`from collection: ${col} get key: ${key} with params ${JSON.stringify(req.params)}`)
-//   const item = (await db.collection('participants').get(key))?.props
-//   console.log(JSON.stringify(item, null, 2))
-//   res.json(item).end()
-// })
-
 // Get a full listing
 app.get('/participants', async (req, res) => { 
   const {results: items} = await db.collection('participants').filter()  
@@ -44,21 +34,35 @@ app.get('/participants', async (req, res) => {
   res.json(items).end()
 })
 
-// Get a full listing
+// Get a full listing personal
 app.get('/participants/details', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
-  // const items = await Promise.all(
-  //   itemsMetaData.map(async ({ key }) => {
-  //     const element = (await db.collection('participants').get(key))?.props;
-  //     if(element.active == true){
-  //       return element.personal;
-  //     }
-  //   })
-  // );
   const filteredList = items.filter(el=> el.props.active == true).map(e=> e.props.personal)
   console.log(JSON.stringify(filteredList))
   res.json(filteredList).end()
 })
+
+// Get a full listing personal
+app.get('/participants/details/deleted', async (req, res) => {
+  const { results: items } = await db.collection('participants').filter()
+  const filteredList = items.filter(el=> el.props.active == false).map(e=> e.props.personal)
+  console.log(JSON.stringify(filteredList))
+  res.json(filteredList).end()
+})
+
+// Get a single item
+app.get('/participants/details/:email', async (req, res) => {
+  // const col = req.params.col
+  const email = req.params.email
+  const item = (await db.collection('participants').get(email))?.props
+  const data = {...item.personal, ...item.active}
+  console.log(JSON.stringify(data, null, 2))
+  res.json(data).end()
+})
+
+
+
+
 
 // Catch all handler for all other request.
 app.use('*', (req, res) => {
