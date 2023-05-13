@@ -42,7 +42,7 @@ app.get('/participants', async (req, res) => {
   // const col = req.params.col
   // console.log(`list collection with params: ${JSON.stringify(req.params)}`)
   const filterCondition = {
-    'attribute': 'active',
+    'attribute': 'props.active',
     'operator': '=',
     'value': false
   }
