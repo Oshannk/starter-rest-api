@@ -15,7 +15,11 @@ app.post('/participants/add', async (req, res) => {
   // console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
   const item = await db.collection('participants').set(email, req.body)
   console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
+  res.status(200).json({
+    status: "success",
+    items 
+  }).end();
+  // res.json(item).end()
 })
 
 
@@ -23,23 +27,35 @@ app.post('/participants/add', async (req, res) => {
 app.get('/participants', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
   console.log(JSON.stringify(items))
-  res.json(items).end()
+  res.status(200).json({
+    status: "success",
+    items 
+  }).end();
+  // res.json(items).end()
 })
 
 // Get a full listing personal
 app.get('/participants/details', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
-  const filteredList = items.filter(el => el.props.active == true).map(e => e.props.personal)
-  console.log(JSON.stringify(filteredList))
-  res.json(filteredList).end()
+  const data = items.filter(el => el.props.active == true).map(e => e.props.personal)
+  console.log(JSON.stringify(data))
+  res.status(200).json({
+    status: "success",
+    data 
+  }).end();
+  // res.json(filteredList).end()
 })
 
 // Get a full listing personal
 app.get('/participants/details/deleted', async (req, res) => {
   const { results: items } = await db.collection('participants').filter()
-  const filteredList = items.filter(el => el.props.active == false).map(e => e.props.personal)
-  console.log(JSON.stringify(filteredList))
-  res.json(filteredList).end()
+  const data = items.filter(el => el.props.active == false).map(e => e.props.personal)
+  console.log(JSON.stringify(data))
+  res.status(200).json({
+    status: "success",
+    data 
+  }).end();
+  // res.json(filteredList).end()
 })
 
 // Get a single item
@@ -54,7 +70,7 @@ app.get('/participants/details/:email', async (req, res) => {
   console.log(JSON.stringify(data, null, 2))
   res.status(200).json({
     status: "success",
-    data: { data }
+    data 
   }).end();
   // res.json(data).end()
 })
@@ -69,9 +85,13 @@ app.get('/participants/work/:email', async (req, res) => {
   }
   const data = item.work;
   console.log(JSON.stringify(data, null, 2))
-  res.json(data).end()
+  res.status(200).json({
+    status: "success",
+    data 
+  }).end();
+  // res.json(data).end()
 })
-
+ 
 
 // Delete an item
 app.delete('/:col/:key', async (req, res) => {
