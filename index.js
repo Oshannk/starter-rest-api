@@ -28,21 +28,21 @@ const validateObject = (obj) => {
 // Add participant
 app.post('/participants/add', async (req, res) => {
 
-  const emptyProps = validateObject(req.body);
-  if (emptyProps.length > 0) {
-    res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` });
-  }
-
-  const email = req.params.personal.email
-  if (validateEmail(email)) {
-    res.status(400).json({ status: "error", message: `Email not valid!.` });
-  }
-
-  if (validateDate(req.body.personal.dob)) {
-    res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
-  }
-
   try {
+    const emptyProps = validateObject(req.body);
+    if (emptyProps.length > 0) {
+      res.status(400).json({ status: "error", message: `${emptyProps[0]} is empty` });
+    }
+
+    const email = req.body.personal.email
+    if (validateEmail(email)) {
+      res.status(400).json({ status: "error", message: `Email not valid!.` });
+    }
+
+    if (validateDate(req.body.personal.dob)) {
+      res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
+    }
+
     const data = await db.collection('participants').set(email, req.body)
     console.log(JSON.stringify(data, null, 2))
     res.status(200).json({
@@ -228,7 +228,7 @@ app.put('/participants/:email', async (req, res) => {
     res.status(400).json({ status: "error", message: `Date of Birth not valid!.` });
   }
 
-  try{
+  try {
     const data = await db.collection('participants').set(key, body)
     console.log(JSON.stringify(data, null, 2))
     res.status(200).json({
@@ -236,9 +236,9 @@ app.put('/participants/:email', async (req, res) => {
       data
     }).end();
 
-  }catch(err){
+  } catch (err) {
     res.status(500).json({ status: "error", message: 'Internal server error', error: err });
-  }  
+  }
 })
 
 // Catch all handler for all other request.
