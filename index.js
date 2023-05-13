@@ -44,9 +44,9 @@ app.get('/participants', async (req, res) => {
   const filterCondition = {
     'attribute': 'props.active',
     'operator': '=',
-    'value': false
+    'value': true
   }
-  const { results: items } = await db.collection('participants').filter(filterCondition)
+  const items = await db.collection('participants').filter(filterCondition)
   
   console.log(JSON.stringify(items))
   res.json(items).end()
