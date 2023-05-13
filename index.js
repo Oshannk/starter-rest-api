@@ -13,11 +13,11 @@ app.post('/participants/add', async (req, res) => {
   const key = req.params.key
   const email = req.params.personal.email
   // console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection('participants').set(email, req.body)
-  console.log(JSON.stringify(item, null, 2))
+  const data = await db.collection('participants').set(email, req.body)
+  console.log(JSON.stringify(data, null, 2))
   res.status(200).json({
     status: "success",
-    items 
+    data 
   }).end();
   // res.json(item).end()
 })
@@ -25,11 +25,11 @@ app.post('/participants/add', async (req, res) => {
 
 // Get a full listing
 app.get('/participants', async (req, res) => {
-  const { results: items } = await db.collection('participants').filter()
-  console.log(JSON.stringify(items))
+  const { results: data } = await db.collection('participants').filter()
+  console.log(JSON.stringify(data))
   res.status(200).json({
     status: "success",
-    items 
+    data 
   }).end();
   // res.json(items).end()
 })
@@ -92,15 +92,33 @@ app.get('/participants/work/:email', async (req, res) => {
   // res.json(data).end()
 })
  
+// Get a single item work
+app.get('/participants/home/:email', async (req, res) => {
+  const email = req.params.email
+  const item = (await db.collection('participants').get(email))?.props
+  if (item.active == false) {
+    res.status(400).json({ status: "error", message: 'Deleted Participant' });
+
+  }
+  const data = item.home;
+  console.log(JSON.stringify(data, null, 2))
+  res.status(200).json({
+    status: "success",
+    data 
+  }).end();
+  // res.json(data).end()
+})
+ 
 
 // Delete an item
-app.delete('/:col/:key', async (req, res) => {
-  const col = req.params.col
-  const key = req.params.key
-  console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).delete(key)
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
+app.delete('/participants/:email', async (req, res) => {
+  const email = req.params.email
+
+  const item = (await db.collection('participants').get(email))
+
+  const result = await db.collection('participants').set(item.key, {...item, props: {...item.props, active: false}})
+  console.log(JSON.stringify(result, null, 2))
+  res.json(result).end()
 })
 
 
