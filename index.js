@@ -18,6 +18,7 @@ function validateDate(dateString) {
 const validateObject = (obj) => {
   const emptyProps = []
   for (const key in obj) {
+    console.log('obj[key]', key,' ', obj[key], ' ', !obj[key]);
     if (!obj[key]) {
       emptyProps.push(key)
     }
