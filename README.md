@@ -1,34 +1,41 @@
-# Starter REST Api
+**Endpoints**
 
-This is an example REST Api designed to be deployed on Cyclic.sh
+The following endpoints are available:
 
-[![Deploy to Cyclic](https://deploy.cyclic.app/button.svg)](https://deploy.cyclic.app/)
+- **POST /participants/add** - adds a participant to the database.
+- **GET /participants** - returns a list of all participants.
+- **GET /participants/details** - returns a list of all participants' personal details.
+- **GET /participants/details/deleted** - returns a list of all deleted participants' personal details.
+- **GET /participants/details/:email** - returns the personal details of a single participant.
+- **GET /participants/work/:email** - returns the work details of a single participant.
+- **GET /participants/home/:email** - returns the work details of a single participant.
+- **DELETE /participants/:email** - delete a single participant (soft delete).
+- **PUT /participants/:email** - update a single participant.
 
+**Validation**
 
-## Examples
+The API includes three functions for validating email addresses, dates, and objects with empty properties. 
 
-### Create/Update - Insert/Upsert
+**Responses**
 
-```shell
-curl -i https://localhost:3000/animals/rin%20tin%20tin \
-    --data '{"breed":"German Shepard", "gender": "male"}' \
-    -XPOST -H 'Content-Type: application/json'
-```
+Responses to valid requests include a status and a data property, which contains the results of the request. In the case of an error, a status and a message are sent instead.
 
-### Read All - List
-
-```shell
-curl -i https://localhost:3000/animals
-```
-
-### Read
-
-```shell
-curl -i https://localhost:3000/animals/lassy
-```
-
-### Delete
-
-```shell
-curl -i -XDELETE https://localhost:3000/animals/lassy
-```
+**Object Design**
+{
+    "personal": {
+        "email": "test@test.com",
+        "first_name": "f_name",
+        "last_name": "l_name",
+        "dob": "1998/12/01"
+    },
+    "work": {
+        "company_name": "cname",
+        "salary": "100000",
+        "currency": "USD"
+    },
+    "home": {
+        "country": "UK",
+        "ciry": "London"
+    },
+    "active": true
+}
