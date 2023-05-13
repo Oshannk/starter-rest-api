@@ -55,9 +55,13 @@ app.get('/participants/details', async (req, res) => {
   //     }
   //   })
   // );
-  const filteredList = items.filter(e=> e.active == true)
-  console.log(JSON.stringify(filteredList))
-  res.json(filteredList).end()
+  const filteredList = items.forEach(e=> {
+    if(e.props.active == true){
+      return e.props.personal;
+    }
+  })
+  console.log(JSON.stringify(items))
+  res.json(items).end()
 })
 
 // Catch all handler for all other request.
